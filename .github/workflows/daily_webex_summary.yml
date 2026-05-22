@@ -1,0 +1,35 @@
+name: Daily Webex Summary
+
+on:
+  schedule:
+    # Runs daily at 08:00 UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependency
+        run: pip install webexteamssdk
+
+      - name: Run daily summary
+        env:
+          WEBEX_TOKEN: ${{ secrets.WEBEX_TOKEN }}
+          SPACE_TITLE: ${{ secrets.SPACE_TITLE }}
+          ROOM_ID: ${{ secrets.ROOM_ID }}
+          TARGET_ROOM_TITLE: ${{ secrets.TARGET_ROOM_TITLE }}
+          TARGET_ROOM_ID: ${{ secrets.TARGET_ROOM_ID }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          LOOKBACK_HOURS: "24"
+        run: python scripts/daily_webex_summary.py
