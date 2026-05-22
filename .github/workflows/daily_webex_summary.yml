@@ -3,7 +3,7 @@ name: Daily Webex Summary
 on:
   schedule:
     # Runs daily at 08:00 UTC
-    - cron: '0 8 * * *'
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 jobs:
